@@ -1,0 +1,362 @@
+[
+  {
+    "cond": "STR",
+    "seed": 2,
+    "common_coverage": 32,
+    "common_qd_score": 22.72361111111111,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 56.1408154964447,
+    "n_solver_calls": 5141
+  },
+  {
+    "cond": "STR",
+    "seed": 1,
+    "common_coverage": 33,
+    "common_qd_score": 23.53287037037037,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 68.69919395446777,
+    "n_solver_calls": 5086
+  },
+  {
+    "cond": "STR",
+    "seed": 0,
+    "common_coverage": 29,
+    "common_qd_score": 21.362222222222222,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 72.34879541397095,
+    "n_solver_calls": 5142
+  },
+  {
+    "cond": "STR",
+    "seed": 3,
+    "common_coverage": 31,
+    "common_qd_score": 22.074814814814808,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 85.34911942481995,
+    "n_solver_calls": 5161
+  },
+  {
+    "cond": "STR",
+    "seed": 4,
+    "common_coverage": 32,
+    "common_qd_score": 22.685,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 63.602806091308594,
+    "n_solver_calls": 5100
+  },
+  {
+    "cond": "STR",
+    "seed": 5,
+    "common_coverage": 31,
+    "common_qd_score": 22.86722222222222,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 71.44825530052185,
+    "n_solver_calls": 5096
+  },
+  {
+    "cond": "STR",
+    "seed": 6,
+    "common_coverage": 32,
+    "common_qd_score": 22.88842592592593,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 67.89485120773315,
+    "n_solver_calls": 5170
+  },
+  {
+    "cond": "STR",
+    "seed": 7,
+    "common_coverage": 30,
+    "common_qd_score": 21.09740740740741,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 62.09091663360596,
+    "n_solver_calls": 5129
+  },
+  {
+    "cond": "PLAY",
+    "seed": 1,
+    "common_coverage": 28,
+    "common_qd_score": 18.790833333333335,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 13.191326379776001,
+    "n_solver_calls": 5163
+  },
+  {
+    "cond": "PLAY",
+    "seed": 0,
+    "common_coverage": 34,
+    "common_qd_score": 23.789722222222224,
+    "common_max_fit": 0.985648148148148,
+    "wall_time_s": 24.815930366516113,
+    "n_solver_calls": 5107
+  },
+  {
+    "cond": "STR",
+    "seed": 8,
+    "common_coverage": 30,
+    "common_qd_score": 21.60472222222222,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 68.53643107414246,
+    "n_solver_calls": 5075
+  },
+  {
+    "cond": "STR",
+    "seed": 9,
+    "common_coverage": 35,
+    "common_qd_score": 24.547129629629623,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 59.8900306224823,
+    "n_solver_calls": 5061
+  },
+  {
+    "cond": "PLAY",
+    "seed": 3,
+    "common_coverage": 31,
+    "common_qd_score": 21.89777777777778,
+    "common_max_fit": 0.985648148148148,
+    "wall_time_s": 36.94446849822998,
+    "n_solver_calls": 5138
+  },
+  {
+    "cond": "PLAY",
+    "seed": 2,
+    "common_coverage": 35,
+    "common_qd_score": 23.557685185185186,
+    "common_max_fit": 0.9631481481481481,
+    "wall_time_s": 45.448851585388184,
+    "n_solver_calls": 5149
+  },
+  {
+    "cond": "PLAY",
+    "seed": 4,
+    "common_coverage": 32,
+    "common_qd_score": 22.590833333333332,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 27.57043981552124,
+    "n_solver_calls": 5119
+  },
+  {
+    "cond": "PLAY",
+    "seed": 6,
+    "common_coverage": 31,
+    "common_qd_score": 21.167314814814816,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 24.177935361862183,
+    "n_solver_calls": 5116
+  },
+  {
+    "cond": "PLAY",
+    "seed": 7,
+    "common_coverage": 29,
+    "common_qd_score": 19.998425925925925,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 23.179385662078857,
+    "n_solver_calls": 5065
+  },
+  {
+    "cond": "PLAY",
+    "seed": 8,
+    "common_coverage": 33,
+    "common_qd_score": 23.551759259259253,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 20.310625553131104,
+    "n_solver_calls": 5116
+  },
+  {
+    "cond": "PLAY",
+    "seed": 9,
+    "common_coverage": 27,
+    "common_qd_score": 19.03074074074074,
+    "common_max_fit": 0.985648148148148,
+    "wall_time_s": 10.244246006011963,
+    "n_solver_calls": 5109
+  },
+  {
+    "cond": "PLAY",
+    "seed": 5,
+    "common_coverage": 33,
+    "common_qd_score": 22.537777777777784,
+    "common_max_fit": 0.985648148148148,
+    "wall_time_s": 39.514703035354614,
+    "n_solver_calls": 5028
+  },
+  {
+    "cond": "SKILL",
+    "seed": 0,
+    "common_coverage": 36,
+    "common_qd_score": 24.460925925925924,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 33.74496841430664,
+    "n_solver_calls": 5056
+  },
+  {
+    "cond": "SKILL",
+    "seed": 1,
+    "common_coverage": 33,
+    "common_qd_score": 22.5725,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 29.00935673713684,
+    "n_solver_calls": 5060
+  },
+  {
+    "cond": "SKILL",
+    "seed": 3,
+    "common_coverage": 34,
+    "common_qd_score": 24.003611111111113,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 39.120476961135864,
+    "n_solver_calls": 5116
+  },
+  {
+    "cond": "SKILL",
+    "seed": 2,
+    "common_coverage": 33,
+    "common_qd_score": 22.993611111111115,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 42.465779542922974,
+    "n_solver_calls": 5111
+  },
+  {
+    "cond": "SKILL",
+    "seed": 5,
+    "common_coverage": 34,
+    "common_qd_score": 22.917314814814816,
+    "common_max_fit": 0.9731481481481481,
+    "wall_time_s": 31.047950267791748,
+    "n_solver_calls": 5001
+  },
+  {
+    "cond": "SKILL",
+    "seed": 4,
+    "common_coverage": 34,
+    "common_qd_score": 23.701481481481483,
+    "common_max_fit": 0.9606481481481481,
+    "wall_time_s": 36.93292045593262,
+    "n_solver_calls": 5075
+  },
+  {
+    "cond": "SKILL",
+    "seed": 7,
+    "common_coverage": 32,
+    "common_qd_score": 22.822870370370374,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 33.98496460914612,
+    "n_solver_calls": 5039
+  },
+  {
+    "cond": "SKILL",
+    "seed": 6,
+    "common_coverage": 33,
+    "common_qd_score": 23.218888888888884,
+    "common_max_fit": 0.9925925925925927,
+    "wall_time_s": 37.74598693847656,
+    "n_solver_calls": 5068
+  },
+  {
+    "cond": "RAND",
+    "seed": 0,
+    "common_coverage": 23,
+    "common_qd_score": 14.678981481481483,
+    "common_max_fit": 0.9425925925925926,
+    "wall_time_s": 11.238119125366211,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 1,
+    "common_coverage": 24,
+    "common_qd_score": 15.035648148148148,
+    "common_max_fit": 0.856388888888889,
+    "wall_time_s": 10.624451875686646,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "SKILL",
+    "seed": 8,
+    "common_coverage": 35,
+    "common_qd_score": 24.729074074074074,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 33.458465814590454,
+    "n_solver_calls": 5072
+  },
+  {
+    "cond": "SKILL",
+    "seed": 9,
+    "common_coverage": 34,
+    "common_qd_score": 23.45287037037037,
+    "common_max_fit": 0.9981481481481482,
+    "wall_time_s": 35.18374991416931,
+    "n_solver_calls": 5069
+  },
+  {
+    "cond": "RAND",
+    "seed": 2,
+    "common_coverage": 24,
+    "common_qd_score": 15.54138888888889,
+    "common_max_fit": 0.8853703703703704,
+    "wall_time_s": 11.259705305099487,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 3,
+    "common_coverage": 25,
+    "common_qd_score": 15.718888888888893,
+    "common_max_fit": 0.851388888888889,
+    "wall_time_s": 11.053165435791016,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 4,
+    "common_coverage": 23,
+    "common_qd_score": 14.649722222222222,
+    "common_max_fit": 0.9421296296296297,
+    "wall_time_s": 11.49736738204956,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 5,
+    "common_coverage": 25,
+    "common_qd_score": 16.282222222222224,
+    "common_max_fit": 0.9013888888888889,
+    "wall_time_s": 10.792871713638306,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 6,
+    "common_coverage": 24,
+    "common_qd_score": 15.39722222222222,
+    "common_max_fit": 0.9481481481481482,
+    "wall_time_s": 11.080850839614868,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 7,
+    "common_coverage": 26,
+    "common_qd_score": 16.23898148148148,
+    "common_max_fit": 0.8833333333333334,
+    "wall_time_s": 9.711827039718628,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 8,
+    "common_coverage": 25,
+    "common_qd_score": 15.969722222222227,
+    "common_max_fit": 0.9296296296296297,
+    "wall_time_s": 10.561810970306396,
+    "n_solver_calls": 5200
+  },
+  {
+    "cond": "RAND",
+    "seed": 9,
+    "common_coverage": 24,
+    "common_qd_score": 14.66712962962963,
+    "common_max_fit": 0.8681481481481483,
+    "wall_time_s": 10.794573307037354,
+    "n_solver_calls": 5200
+  }
+]
