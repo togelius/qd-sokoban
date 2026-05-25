@@ -1,67 +1,21 @@
-# Behavioral Descriptor Choice in MAP-Elites for Sokoban Puzzle Generation
+# qd-sokoban
 
-A small, self-contained research project comparing three behavioral
-descriptor families for MAP-Elites-driven Sokoban level generation,
-plus a random-search baseline. Holds fitness, encoding, and compute
-budget fixed; varies only the descriptor.
+Research project on **behavioral descriptor choice in quality-diversity (QD)
+search for procedural content generation**.
 
-The accompanying paper is in `paper/paper.pdf`.
+Two versions of the project live here:
 
-## Layout
+- [`version1/`](version1/) — first pass. Sokoban only, four conditions
+  (RAND / ME-STR / ME-PLAY / ME-SKILL), single-session sprint. See
+  [`version1/README.md`](version1/README.md) and
+  [`version1/paper/paper.pdf`](version1/paper/paper.pdf).
 
-```
-paper_qd_sokoban/
-├── code/                      # all source
-│   ├── sokoban.py             # Level, State, mechanics, deadlock map
-│   ├── solver.py              # A* with deadlock-pruned heuristic
-│   ├── generator.py           # random init + 6 mutation operators
-│   ├── descriptors.py         # STR / PLAY / SKILL / COMMON descriptors + fitness
-│   ├── qd.py                  # MAP-Elites and random-search loops + archive class
-│   ├── experiment.py          # multiprocessing experiment driver
-│   ├── analyze.py             # tables, stats, plots, LaTeX emitters
-│   ├── render_levels.py       # matplotlib renderer for example puzzles
-│   ├── test_basic.py          # smoke tests for sokoban/solver
-│   └── smoke.py               # tiny smoke run of all 4 conditions
-├── results/                   # all generated outputs (gitignored except summaries)
-│   ├── raw_results.pkl        # serialised archives + logs for all 40 runs
-│   ├── summary.json           # per-run scalar metrics
-│   ├── summary_table.txt      # human-readable table
-│   ├── stats.txt              # pairwise Mann-Whitney U
-│   ├── *.pdf                  # figures (heatmaps, convergence, bars, time)
-│   ├── examples/              # ASCII renderings of top puzzles per condition
-│   └── figures/               # rendered example-puzzle PDFs
-├── paper/                     # IEEE conference paper sources + compiled PDF
-│   ├── paper.tex
-│   ├── results_table.tex      # auto-generated
-│   ├── results_inline.tex     # auto-generated
-│   ├── references.bib
-│   └── paper.pdf
-└── log/
-    └── RESEARCH_LOG.md        # ideas, decisions, dead ends
-```
+- [`version2/`](version2/) — extended study. Adds a second domain (tile-based
+  platformer), more descriptor families, more seeds, proper effect sizes
+  and multiple-comparison corrections, and a mechanistic analysis of
+  why "cheap" structural descriptors implicitly select for solver
+  hardness. See [`version2/README.md`](version2/README.md).
 
-## Reproducing
-
-```bash
-cd code
-python3 experiment.py        # ~6 min on 4 cores
-python3 analyze.py           # generates plots and tables
-python3 render_levels.py     # generates example-puzzle figures
-cd ../paper
-pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
-```
-
-`experiment.py --quick` runs a sanity-check version (3 seeds, 7×7,
-1000 evaluations) in ~10 s.
-
-## Key result, in one number
-
-The "cheap" structural descriptor is **2.5× slower** in wall-clock
-than the gameplay descriptor, despite needing no extra solver calls
-per evaluation. It selects for the boards that A* finds hardest to
-solve.
-
-## Dependencies
-
-`numpy`, `scipy`, `matplotlib`, `pdflatex` (with `texlive-publishers`
-for IEEEtran).
+Each version's research log (`version{1,2}/log/RESEARCH_LOG.md`) records
+the running thought process, dead ends, and decisions made during that
+version.

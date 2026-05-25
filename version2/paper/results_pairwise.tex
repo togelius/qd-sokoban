@@ -1,0 +1,33 @@
+\begin{table}[t]
+\centering
+\caption{Pairwise Mann-Whitney $U$ tests (Holm-corrected) for common_coverage. Cells show $p_{\text{adj}}$ / Cliff's $\delta$. \textbf{Bold} if $p_{\text{adj}} < 0.05$.}
+\label{tab:pairwise-common_coverage}
+\small
+\setlength{\tabcolsep}{2.5pt}
+\noindent\textbf{Sokoban}\\
+\begin{tabular}{l c c c c c}
+\toprule
+ & RAND & STR & PLAY & SKILL & COMMON \\
+\midrule
+RAND & -- & \textbf{0.000/-1.00} & \textbf{0.000/-1.00} & \textbf{0.000/-1.00} & \textbf{0.000/-1.00} \\
+STR & \textbf{0.000/+1.00} & -- & 0.214/+0.23 & 0.119/-0.34 & \textbf{0.000/-0.92} \\
+PLAY & \textbf{0.000/+1.00} & 0.214/-0.23 & -- & \textbf{0.024/-0.49} & \textbf{0.000/-0.95} \\
+SKILL & \textbf{0.000/+1.00} & 0.119/+0.34 & \textbf{0.024/+0.49} & -- & \textbf{0.000/-0.72} \\
+COMMON & \textbf{0.000/+1.00} & \textbf{0.000/+0.92} & \textbf{0.000/+0.95} & \textbf{0.000/+0.72} & -- \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\noindent\textbf{Platformer}\\
+\begin{tabular}{l c c c c c}
+\toprule
+ & RAND & STR & PLAY & SKILL & COMMON \\
+\midrule
+RAND & -- & 0.770/-0.11 & \textbf{0.000/+0.80} & 0.466/+0.26 & \textbf{0.000/-0.82} \\
+STR & 0.770/+0.11 & -- & \textbf{0.010/+0.57} & 0.770/+0.16 & \textbf{0.004/-0.63} \\
+PLAY & \textbf{0.000/-0.80} & \textbf{0.010/-0.57} & -- & \textbf{0.024/-0.51} & \textbf{0.000/-0.95} \\
+SKILL & 0.466/-0.26 & 0.770/-0.16 & \textbf{0.024/+0.51} & -- & \textbf{0.000/-0.78} \\
+COMMON & \textbf{0.000/+0.82} & \textbf{0.004/+0.63} & \textbf{0.000/+0.95} & \textbf{0.000/+0.78} & -- \\
+\bottomrule
+\end{tabular}
+\vspace{4pt}
+\end{table}

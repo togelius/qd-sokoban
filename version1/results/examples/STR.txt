@@ -1,0 +1,91 @@
+# Example puzzles from condition STR
+# Selected as max-fitness elite per common archive cell.
+
+--- example 1 ---
+common idx: (1, 8)  fit: 0.998  n_boxes: 2  plan_len: 44  pushes: 20
+########
+#@ #  ##
+#      #
+#   #  #
+#.#    #
+#.##$$ #
+#     ##
+########
+
+--- example 2 ---
+common idx: (1, 9)  fit: 0.998  n_boxes: 2  plan_len: 56  pushes: 20
+########
+#  #   #
+#  #@$ #
+#. #  ##
+#.#    #
+#    $##
+#  #   #
+########
+
+--- example 3 ---
+common idx: (2, 8)  fit: 0.998  n_boxes: 3  plan_len: 46  pushes: 20
+########
+#@ .$  #
+# #    #
+# ## $ #
+# # # ##
+#  $   #
+##..   #
+########
+
+--- example 4 ---
+common idx: (2, 9)  fit: 0.998  n_boxes: 3  plan_len: 60  pushes: 20
+########
+#  #   #
+#  #@$ #
+#. #  ##
+#.#    #
+# *  $##
+#  #   #
+########
+
+--- example 5 ---
+common idx: (3, 9)  fit: 0.998  n_boxes: 4  plan_len: 57  pushes: 22
+########
+# .  . #
+##  $ ##
+#  #$# #
+#  $   #
+##$# # #
+#.   .@#
+########
+
+--- example 6 ---
+common idx: (3, 8)  fit: 0.998  n_boxes: 4  plan_len: 46  pushes: 20
+########
+#@*.$  #
+# #    #
+# ###$ #
+# # # ##
+#  $   #
+# ..   #
+########
+
+--- example 7 ---
+common idx: (3, 7)  fit: 0.936  n_boxes: 4  plan_len: 35  pushes: 19
+########
+#   @  #
+#.##  $#
+#  $ * #
+#   #$ #
+## #  .#
+# # # .#
+########
+
+--- example 8 ---
+common idx: (1, 7)  fit: 0.920  n_boxes: 2  plan_len: 34  pushes: 20
+########
+#      #
+#      #
+#  #   #
+#.  #$##
+#.#  $ #
+#  #  @#
+########
+

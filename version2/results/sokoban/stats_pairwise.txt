@@ -1,0 +1,77 @@
+=== common_coverage ===
+       A vs B          meanA    meanB          p     p_adj  cliffsd  effect     
+  COMMON vs PLAY      37.300   31.250   2.13e-07  1.28e-06    +0.95  large       *
+  COMMON vs RAND      37.300   23.950   4.36e-08  4.36e-07    +1.00  large       *
+  COMMON vs SKILL     37.300   33.750   8.23e-05  0.000329    +0.72  large       *
+  COMMON vs STR       37.300   32.400   6.02e-07  3.01e-06    +0.92  large       *
+    PLAY vs RAND      31.250   23.950   5.06e-08  4.36e-07    +1.00  large       *
+    PLAY vs SKILL     31.250   33.750    0.00786    0.0236    -0.49  large       *
+    PLAY vs STR       31.250   32.400      0.214     0.214    -0.23  small      
+    RAND vs SKILL     23.950   33.750   4.84e-08  4.36e-07    -1.00  large       *
+    RAND vs STR       23.950   32.400   4.56e-08  4.36e-07    -1.00  large       *
+   SKILL vs STR       33.750   32.400     0.0596     0.119    +0.34  medium     
+
+=== common_qd_score ===
+       A vs B          meanA    meanB          p     p_adj  cliffsd  effect     
+  COMMON vs PLAY      25.762   21.540   1.66e-07  9.94e-07    +0.97  large       *
+  COMMON vs RAND      25.762   15.187    6.8e-08   6.8e-07    +1.00  large       *
+  COMMON vs SKILL     25.762   23.444   8.29e-05  0.000332    +0.73  large       *
+  COMMON vs STR       25.762   22.970   3.94e-07  1.97e-06    +0.94  large       *
+    PLAY vs RAND      21.540   15.187    6.8e-08   6.8e-07    +1.00  large       *
+    PLAY vs SKILL     21.540   23.444    0.00334      0.01    -0.55  large       *
+    PLAY vs STR       21.540   22.970    0.00656    0.0131    -0.51  large       *
+    RAND vs SKILL     15.187   23.444    6.8e-08   6.8e-07    -1.00  large       *
+    RAND vs STR       15.187   22.970    6.8e-08   6.8e-07    -1.00  large       *
+   SKILL vs STR       23.444   22.970      0.365     0.365    +0.17  small      
+
+=== common_mean_fitness ===
+       A vs B          meanA    meanB          p     p_adj  cliffsd  effect     
+  COMMON vs PLAY       0.691    0.689      0.508      0.85    +0.12  negligible 
+  COMMON vs RAND       0.691    0.634    6.8e-08   6.8e-07    +1.00  large       *
+  COMMON vs SKILL      0.691    0.695      0.425      0.85    -0.15  small      
+  COMMON vs STR        0.691    0.710   0.000104  0.000519    -0.72  large       *
+    PLAY vs RAND       0.689    0.634    6.8e-08   6.8e-07    +1.00  large       *
+    PLAY vs SKILL      0.689    0.695      0.172     0.516    -0.26  small      
+    PLAY vs STR        0.689    0.710   8.29e-05  0.000498    -0.73  large       *
+    RAND vs SKILL      0.634    0.695    6.8e-08   6.8e-07    -1.00  large       *
+    RAND vs STR        0.634    0.710    6.8e-08   6.8e-07    -1.00  large       *
+   SKILL vs STR        0.695    0.710    0.00135   0.00539    -0.59  large       *
+
+=== common_max_fitness ===
+       A vs B          meanA    meanB          p     p_adj  cliffsd  effect     
+  COMMON vs PLAY       0.997    0.992     0.0789     0.394    +0.26  small      
+  COMMON vs RAND       0.997    0.911   1.95e-08  1.75e-07    +1.00  large       *
+  COMMON vs SKILL      0.997    0.995      0.653         1    +0.06  negligible 
+  COMMON vs STR        0.997    0.998      0.588         1    -0.06  negligible 
+    PLAY vs RAND       0.992    0.911   4.42e-08   3.1e-07    +1.00  large       *
+    PLAY vs SKILL      0.992    0.995       0.21     0.839    -0.19  small      
+    PLAY vs STR        0.992    0.998     0.0215     0.129    -0.33  small      
+    RAND vs SKILL      0.911    0.995   2.43e-08  1.94e-07    -1.00  large       *
+    RAND vs STR        0.911    0.998   1.51e-08  1.51e-07    -1.00  large       *
+   SKILL vs STR        0.995    0.998      0.327     0.981    -0.12  negligible 
+
+=== wall_time_s ===
+       A vs B          meanA    meanB          p     p_adj  cliffsd  effect     
+  COMMON vs PLAY      76.550   37.309    7.9e-08   6.8e-07    +0.99  large       *
+  COMMON vs RAND      76.550   11.198    6.8e-08   6.8e-07    +1.00  large       *
+  COMMON vs SKILL     76.550   49.803   1.58e-06  4.73e-06    +0.89  large       *
+  COMMON vs STR       76.550   81.837      0.102     0.102    -0.30  small      
+    PLAY vs RAND      37.309   11.198    6.8e-08   6.8e-07    +1.00  large       *
+    PLAY vs SKILL     37.309   49.803    0.00306   0.00611    -0.55  large       *
+    PLAY vs STR       37.309   81.837    7.9e-08   6.8e-07    -0.99  large       *
+    RAND vs SKILL     11.198   49.803    6.8e-08   6.8e-07    -1.00  large       *
+    RAND vs STR       11.198   81.837    6.8e-08   6.8e-07    -1.00  large       *
+   SKILL vs STR       49.803   81.837   7.95e-07  3.18e-06    -0.92  large       *
+
+=== n_solver_calls ===
+       A vs B          meanA    meanB          p     p_adj  cliffsd  effect     
+  COMMON vs PLAY    5381.600 5416.000     0.0256     0.128    -0.41  medium     
+  COMMON vs RAND    5381.600 5500.000   7.98e-09  7.98e-08    -1.00  large       *
+  COMMON vs SKILL   5381.600 5404.400      0.107      0.43    -0.30  small      
+  COMMON vs STR     5381.600 5416.650     0.0106    0.0634    -0.47  large      
+    PLAY vs RAND    5416.000 5500.000   8.01e-09  7.98e-08    -1.00  large       *
+    PLAY vs SKILL   5416.000 5404.400      0.365      0.95    +0.17  small      
+    PLAY vs STR     5416.000 5416.650      0.871      0.95    -0.03  negligible 
+    RAND vs SKILL   5500.000 5404.400   8.01e-09  7.98e-08    +1.00  large       *
+    RAND vs STR     5500.000 5416.650   7.99e-09  7.98e-08    +1.00  large       *
+   SKILL vs STR     5404.400 5416.650      0.317      0.95    -0.19  small      

@@ -1,0 +1,91 @@
+# Example puzzles from condition RAND
+# Selected as max-fitness elite per common archive cell.
+
+--- example 1 ---
+common idx: (2, 8)  fit: 0.948  n_boxes: 3  plan_len: 41  pushes: 16
+########
+# #    #
+#     .#
+#$ @## #
+# $##  #
+#.  $ ##
+#    .##
+########
+
+--- example 2 ---
+common idx: (1, 8)  fit: 0.942  n_boxes: 2  plan_len: 43  pushes: 17
+########
+#.  .  #
+#      #
+#     ##
+# ###  #
+# $ $  #
+#@#    #
+########
+
+--- example 3 ---
+common idx: (1, 9)  fit: 0.930  n_boxes: 2  plan_len: 54  pushes: 16
+########
+# @ #  #
+# $    #
+# $ #  #
+# #    #
+## # . #
+#  .   #
+########
+
+--- example 4 ---
+common idx: (2, 7)  fit: 0.873  n_boxes: 3  plan_len: 35  pushes: 14
+########
+# #@   #
+## $ $##
+#  ##  #
+#   . ##
+#  .$  #
+## .   #
+########
+
+--- example 5 ---
+common idx: (0, 8)  fit: 0.861  n_boxes: 1  plan_len: 42  pushes: 9
+########
+#  @   #
+# #    #
+##   #.#
+##     #
+#   #$##
+# #    #
+########
+
+--- example 6 ---
+common idx: (1, 7)  fit: 0.851  n_boxes: 2  plan_len: 35  pushes: 13
+########
+# #  . #
+# $    #
+# $# @ #
+#   #  #
+# #   ##
+##    .#
+########
+
+--- example 7 ---
+common idx: (2, 6)  fit: 0.793  n_boxes: 3  plan_len: 27  pushes: 14
+########
+# #  # #
+#.   . #
+##     #
+####$$ #
+# $ @ ##
+#     .#
+########
+
+--- example 8 ---
+common idx: (0, 7)  fit: 0.786  n_boxes: 1  plan_len: 31  pushes: 11
+########
+# .    #
+# # # ##
+#    $##
+#    @ #
+## #   #
+#      #
+########
+

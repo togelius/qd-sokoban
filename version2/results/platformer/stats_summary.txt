@@ -1,0 +1,37 @@
+metric                 cond     n       mean     std     med                 ci95
+--------------------------------------------------------------------------------
+common_coverage        RAND     20    39.750   1.517  40.000 [ 39.100,  40.400]
+common_coverage        STR      20    39.900   4.564  40.500 [ 37.900,  41.800]
+common_coverage        PLAY     20    35.400   2.891  35.500 [ 34.150,  36.650]
+common_coverage        SKILL    20    38.900   3.684  37.500 [ 37.350,  40.500]
+common_coverage        COMMON   20    45.450   3.980  46.000 [ 43.700,  47.150]
+
+common_qd_score        RAND     20    33.979   1.223  34.160 [ 33.462,  34.484]
+common_qd_score        STR      20    35.310   4.054  35.695 [ 33.552,  36.994]
+common_qd_score        PLAY     20    30.962   2.547  31.050 [ 29.871,  32.053]
+common_qd_score        SKILL    20    34.273   3.126  33.268 [ 32.955,  35.616]
+common_qd_score        COMMON   20    40.681   3.572  40.782 [ 39.123,  42.191]
+
+common_mean_fitness    RAND     20     0.855   0.004   0.855 [  0.853,   0.857]
+common_mean_fitness    STR      20     0.885   0.010   0.885 [  0.881,   0.889]
+common_mean_fitness    PLAY     20     0.875   0.009   0.874 [  0.871,   0.878]
+common_mean_fitness    SKILL    20     0.881   0.007   0.882 [  0.878,   0.884]
+common_mean_fitness    COMMON   20     0.895   0.011   0.894 [  0.891,   0.900]
+
+common_max_fitness     RAND     20     0.935   0.007   0.933 [  0.932,   0.938]
+common_max_fitness     STR      20     0.956   0.010   0.950 [  0.952,   0.960]
+common_max_fitness     PLAY     20     0.952   0.014   0.950 [  0.946,   0.958]
+common_max_fitness     SKILL    20     0.957   0.008   0.950 [  0.953,   0.960]
+common_max_fitness     COMMON   20     0.958   0.013   0.958 [  0.952,   0.963]
+
+wall_time_s            RAND     20     6.158   0.516   6.499 [  5.932,   6.369]
+wall_time_s            STR      20     5.480   0.191   5.500 [  5.397,   5.558]
+wall_time_s            PLAY     20     4.754   0.996   4.568 [  4.332,   5.177]
+wall_time_s            SKILL    20     5.668   0.191   5.696 [  5.582,   5.748]
+wall_time_s            COMMON   20     4.329   0.961   3.912 [  3.934,   4.746]
+
+n_solver_calls         RAND     20  5000.000   0.000 5000.000 [5000.000, 5000.000]
+n_solver_calls         STR      20  5000.000   0.000 5000.000 [5000.000, 5000.000]
+n_solver_calls         PLAY     20  5000.000   0.000 5000.000 [5000.000, 5000.000]
+n_solver_calls         SKILL    20  5000.000   0.000 5000.000 [5000.000, 5000.000]
+n_solver_calls         COMMON   20  5000.000   0.000 5000.000 [5000.000, 5000.000]

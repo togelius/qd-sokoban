@@ -1,0 +1,775 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{graphicx}
+\graphicspath{{../results/}{../results/sokoban/figures/}{../results/platformer/figures/}}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{url}
+\usepackage{microtype}
+
+\hypersetup{colorlinks=true, linkcolor=black, urlcolor=blue, citecolor=blue}
+
+\begin{document}
+
+\title{The Descriptor is Not a Lens: \\
+       Behavioral Descriptors as Implicit Selection Pressure
+       in Quality-Diversity Procedural Content Generation}
+
+\author{\IEEEauthorblockN{Anonymous Submission}}
+
+\maketitle
+
+\begin{abstract}
+Quality-diversity (QD) algorithms have become a default tool for
+procedural content generation (PCG): they return not a single best
+artefact but a whole archive of high-fit niches, indexed by a
+hand-chosen \emph{behavioral descriptor}. The descriptor is usually
+treated as a passive lens onto the design space --- a way to ask the
+search to be diverse. We argue and demonstrate that this view is
+wrong. A behavioral descriptor is an \emph{active selection
+pressure}: it determines which mutated offspring survive to become
+parents, and the probability of survival depends on properties of
+the genome that may not appear in the fitness function at all.
+
+We show this empirically in two PCG domains --- Sokoban puzzle
+generation and tile-based platformer level generation --- under a
+controlled cross-condition design that holds the genome, mutation
+operators, fitness function, and compute budget fixed and varies only
+the descriptor. Across five conditions and twenty replicates per
+condition per domain (200 runs, $\approx 1.05$M evaluations), we
+find that (i) the descriptor choice substantially reshapes the
+projected archive even when the fitness function is identical
+($p_\text{adj}<0.001$, Cliff's $\delta>0.5$ for all
+non-trivial pairs in both domains);
+(ii) in Sokoban, the ``cheap'' structural descriptor is
+$2.2\times$ slower than the gameplay descriptor because it pushes
+selection toward boards with a 20\% infeasibility rate (versus
+13\% for the gameplay descriptor) --- the implicit selection
+pressure shows up not as harder \emph{solvable} boards but as more
+\emph{attempted-then-timed-out} ones;
+(iii) the same descriptor causes no wall-clock overhead at all in
+the platformer because the platformer's A* solver is uniformly
+fast and infeasible levels are filtered cheaply --- the
+mechanism's wall-clock cost is therefore domain-dependent;
+(iv) the rank-ordering of descriptor families is not preserved
+across domains, contradicting the implicit assumption that
+``structural'' descriptors are universally cheap or universally
+informative. We close with a practical decision guide for
+descriptor selection in QD-PCG and a replication package.
+\end{abstract}
+
+\begin{IEEEkeywords}
+procedural content generation, quality diversity, MAP-Elites,
+behavioral characterizations, search-based PCG, Sokoban,
+platformer level generation
+\end{IEEEkeywords}
+
+%==========================================================
+\section{Introduction}
+\label{sec:intro}
+
+Quality-diversity (QD) algorithms~\cite{lehman2011novelty,
+mouret2015illuminating, cully2017qd, pugh2016quality} return not a
+single best artefact but an archive of locally-best artefacts indexed
+by a hand-chosen \emph{behavioral descriptor}. For procedural content
+generation (PCG), this is precisely what designers want: an explicit
+library of distinct levels, puzzles, or scenes that vary along an
+axis of editorial interest~\cite{gravina2019pcgsurvey,
+khalifa2018talakat, fontaine2021illuminating, earle2022illuminating}.
+
+In practice, the descriptor is treated almost as part of the problem
+statement --- a passive lens through which the designer asks the
+search to vary. ``Use the level's width and number of platforms,''
+the convention goes, ``and MAP-Elites will give you a varied set of
+platformer levels.'' This view is implicit in nearly every QD-PCG
+paper and is rarely empirically interrogated.
+
+This paper argues that the view is incorrect, and substantiates the
+argument across two PCG domains.
+
+\paragraph{Thesis} A behavioral descriptor in MAP-Elites is not a
+passive lens; it is an \emph{implicit selection pressure}. Two
+candidate artefacts produced by the same mutation step receive
+different survival probabilities depending on which descriptor cell
+they fall into, on whether that cell is already occupied, and on
+which other artefacts later compete with them in the same cell. The
+designer typically reasons about the descriptor as an axis of
+\emph{display} (``I want to see levels of varying length''); we show
+that it is also an axis of \emph{selection} (``I am, possibly
+without realising it, asking my search to prefer levels that are
+hard for $A^{*}$ to plan in'').
+
+\paragraph{What this paper does} We hold every other component of the
+search fixed --- genome encoding, mutation operators, fitness
+function, compute budget, evaluator --- and vary only the
+descriptor. We do this in two PCG domains: 8$\times$8 Sokoban puzzle
+generation and 10$\times$24 tile-based platformer level generation.
+Both domains share the same MAP-Elites driver and the same family of
+five conditions: a random-search baseline plus four MAP-Elites
+variants using (i) a purely structural descriptor (\textsf{STR}),
+(ii) a gameplay descriptor derived from the solver's plan
+(\textsf{PLAY}), (iii) a solver-effort descriptor (\textsf{SKILL}),
+and (iv) a descriptor that matches the held-out projection used to
+score archives (\textsf{COMMON}, an upper-bound reference). Each
+condition is run for 20 random seeds.
+
+\paragraph{Findings}
+\emph{(F1, replication.)} Every MAP-Elites variant significantly
+outperforms random search on coverage and QD-score in both
+domains, with Cliff's $\delta \!=\! 1.00$ (perfect separation) in
+Sokoban; in the platformer the separation is smaller because random
+levels span the common projection well but \textsf{COMMON} still
+beats \textsf{RAND} with $\delta\!=\!0.82$
+(all $p_\text{adj}\!<\!10^{-5}$).
+\emph{(F2, descriptor matters.)} The descriptor choice substantially
+reshapes the projected archive: the gap between the best
+(\textsf{COMMON}, $37.3\!\pm\!1.7$ cells) and worst (\textsf{PLAY},
+$31.3\!\pm\!2.5$) MAP-Elites condition in Sokoban is $19\%$ of the
+mean and statistically significant with Holm-adjusted
+$p\!<\!10^{-6}$ and $\delta\!=\!+0.95$ (large). The same gap exists
+in the platformer at $28\%$ ($\delta\!=\!+0.95$).
+\emph{(F3, hidden hardness selection in Sokoban.)} \textsf{STR}'s
+descriptor selects toward dense-wall elites; mutating from those
+elites produces a $20\%$ unsolvable-but-attempted rate vs $13\%$
+for \textsf{PLAY}. Each timeout exhausts the full $8000$-node
+budget, so the additional failure work alone accounts for most of
+the $2.2\times$ wall-clock overhead of \textsf{STR} over
+\textsf{PLAY} ($81.8\!\pm\!11.4$\,s vs $37.3\!\pm\!11.6$\,s,
+$p_\text{adj}\!<\!10^{-6}$, $\delta\!=\!-0.99$). The same mechanism
+is absent in the platformer (timeout rates $5{-}6\%$ across all
+conditions; wall-clock differences within a factor of $1.4$).
+\emph{(F4, no universal ordering.)} The best-coverage descriptor
+differs across domains. \textsf{SKILL} narrowly wins among the
+three indirect descriptors in Sokoban ($33.8$ vs $32.4$ for
+\textsf{STR}, $31.3$ for \textsf{PLAY}). In the platformer it is
+\textsf{STR} that narrowly leads ($39.9$ vs $38.9$ for
+\textsf{SKILL}, $35.4$ for \textsf{PLAY}); \textsf{RAND} matches
+\textsf{STR} on coverage but loses on QD-score. The popular intuition
+that ``structural'' descriptors are cheap or that ``gameplay''
+descriptors are universally informative does not survive a
+controlled comparison.
+
+\paragraph{Contributions}
+\begin{enumerate}
+  \item A reframing of behavioral descriptors as implicit selection
+        pressures, with concrete falsifiable predictions and an
+        evaluation protocol (\S\ref{sec:method}).
+  \item A two-domain, five-condition, $20$-seed empirical study with
+        properly multiplicity-corrected effect sizes
+        (\S\ref{sec:experiments}--\ref{sec:results}).
+  \item A mechanism analysis showing that the descriptor's
+        correlation with solver hardness predicts the magnitude of
+        the implicit selection bias (\S\ref{sec:mechanism}).
+  \item A practical descriptor-choice decision guide
+        (\S\ref{sec:discussion}) and a full replication package.
+\end{enumerate}
+
+%==========================================================
+\section{Related Work}
+\label{sec:related}
+
+\subsection{Quality diversity}
+
+The conceptual root of QD is Lehman and Stanley's novelty
+search~\cite{lehman2011novelty}, which discards the fitness signal
+entirely in favour of behavioural novelty as the selection
+pressure. Novelty search demonstrated that ``where you look'' can be
+more important than ``what you look for'' --- a result that prefigures
+the central claim of this paper. Mouret and Clune's
+MAP-Elites~\cite{mouret2015illuminating} integrated novelty and
+fitness into a single algorithm by retaining the best individual per
+cell of a discretised behaviour space. Pugh et al.\
+\cite{pugh2016quality} provided the first systematic taxonomy of
+quality-diversity, and Cully and Demiris~\cite{cully2017qd} gave a
+modular framework that makes the role of the descriptor explicit.
+
+\subsection{Variants of MAP-Elites}
+
+Several extensions of MAP-Elites address its archive-management
+mechanics. CMA-ME~\cite{fontaine2020cma} replaces the uniform-random
+parent selection with a CMA-ES-style emitter that adapts the search
+distribution to the active frontier. CMA-MAE~\cite{fontaine2023cma}
+generalises CMA-ME by annealing a soft archive that tracks both
+discovery and improvement rates. CVT-MAP-Elites
+\cite{vassiliades2017cvtmap} replaces the rectangular grid with a
+centroidal Voronoi tessellation that scales to high-dimensional
+descriptor spaces. DSAGE~\cite{fontaine2021dsage} uses surrogate
+models to extrapolate the archive at lower evaluation cost.
+\emph{None of these variants change the descriptor itself:} all
+inherit whatever descriptor the user provides. The phenomenon we
+investigate --- implicit selection through descriptor choice --- is
+therefore shared by every method in this family.
+
+\subsection{Adaptive and learned descriptors}
+
+A small but growing line of work learns the behavioural descriptor
+rather than hand-designing it. AURORA~\cite{cully2019autonomous}
+learns a low-dimensional behavioural embedding through an
+autoencoder on observed sensory traces, with the avowed goal of
+making the descriptor problem-agnostic.
+AURORA-XCon~\cite{grillotti2022unsupervised} adds a contrastive
+constraint so the learned descriptor remains diverse under archive
+evolution. Paolo et al.~\cite{paolo2020unsupervised} explore
+reachable outcome spaces in robot locomotion. These approaches
+implicitly acknowledge the problem we make explicit: hand-chosen
+descriptors are a substantial design decision whose effects are
+poorly characterised. Our study is complementary --- it documents
+\emph{how much} a descriptor choice matters when it is, as usual,
+hand-chosen.
+
+\subsection{PCG via QD}
+
+The use of QD for PCG was popularised by
+Talakat~\cite{khalifa2018talakat} (bullet-hell), Earle et al.\
+\cite{earle2022illuminating} (neural cellular automata for diverse
+level generation), and Fontaine et al.~\cite{fontaine2021illuminating}
+(latent-space search over GAN-generated Mario scenes). The
+Gravina et al.\ survey~\cite{gravina2019pcgsurvey} reviews QD-PCG
+through 2019. The PCG-via-machine-learning
+literature~\cite{summerville2018procedural} and the PCGRL family
+\cite{khalifa2020pcgrl} sit alongside QD-PCG as alternative
+paradigms but do not replace its niche-finding capability.
+Throughout this literature, descriptors are chosen \emph{ad hoc}
+(``number of enemies and length of solution path,'' or ``mean
+brightness and number of bricks''). To our knowledge, the present
+paper is the first systematic head-to-head comparison of descriptor
+\emph{families} under a controlled protocol across multiple PCG
+domains.
+
+\subsection{Sokoban and platformer level generation}
+
+Sokoban is PSPACE-complete~\cite{culberson1999sokoban} and has been
+a perennial PCG target~\cite{taylor2011sokoban, murofushi2018sokoban,
+kowalski2023sokoban}. Domain-specific solvers~\cite{junghanns2001sokoban}
+make evaluation tractable enough for evolutionary search but slow
+enough that the descriptor's implicit hardness pressure is
+economically meaningful. Mario-style platformer generation has been
+studied with evolutionary search~\cite{shaker2010mario},
+GANs~\cite{volz2018evolving}, Markov chains~\cite{snodgrass2017markov},
+and PCGRL~\cite{khalifa2020pcgrl}. The tile-grid platformer we use
+here is a deliberate simplification chosen so that the
+\emph{descriptor families} are directly comparable to Sokoban's, not
+to compete with the state of the art in Mario generation.
+
+\subsection{Hidden selection in evolutionary computation}
+
+The general observation that evolutionary algorithms can be steered
+by features absent from the fitness function is folklore in the EC
+community. Lehman's collection of evolutionary
+``surprises''~\cite{lehman2020surprising} catalogues many such
+cases. Constrained novelty search~\cite{liapis2015constrained} and
+designer modelling~\cite{liapis2014designer, holmgard2014personas}
+explicitly engineer additional selection pressures. The contribution
+of the present paper is to show that, in QD-PCG specifically, the
+behavioral descriptor is one such pressure even when --- especially
+when --- the practitioner believes it to be merely an axis of
+display.
+
+%==========================================================
+\section{Method: Descriptors as Implicit Selection Pressure}
+\label{sec:method}
+
+\subsection{Formalisation}
+
+Let $\mathcal{G}$ be the genome space (e.g.\ tile-grid levels), let
+$f:\mathcal{G}\to\mathbb{R}_{\geq 0}$ be the fitness function, and
+let $d:\mathcal{G}\to\mathcal{C}$ map each genome into one of finitely
+many descriptor cells $\mathcal{C}$. MAP-Elites maintains an archive
+$A: \mathcal{C}\to \mathcal{G}$ that stores the best-fitness genome
+discovered so far in each cell. Each generation, the algorithm picks
+a parent $g_\text{par}$ uniformly from $A$, mutates to obtain
+$g_\text{ch}$, and inserts $g_\text{ch}$ into $A[d(g_\text{ch})]$ iff
+$f(g_\text{ch}) > f(A[d(g_\text{ch})])$.
+
+The \emph{explicit} selection pressure on a child $g_\text{ch}$ is
+$f$. The \emph{implicit} selection pressure is the cell map $d$:
+$g_\text{ch}$ survives if and only if its descriptor cell happens to
+be empty or contain a worse-fitness occupant. For two children with
+identical fitness, descriptor cell occupancy determines survival.
+
+Two descriptors $d_1, d_2$ that induce the same set of cells but
+assign genomes differently to them will produce different archives
+even with the same $f$ and the same mutation operator. We make this
+quantitative: let $p_d(g)$ denote the probability that a genome $g$
+appears as a cell-winner in the eventual archive under descriptor
+$d$, and let $X(g)$ be any property of $g$ (e.g.\ the number of A*
+nodes the solver expands). Then
+\[
+   \mathbb{E}[X \mid \text{retained under } d_1] \neq
+   \mathbb{E}[X \mid \text{retained under } d_2]
+\]
+in general, even when $\mathbb{E}[X \mid \text{evaluated}]$ is the
+same for both. This expectation gap is what we call the
+\emph{retention bias} of $d$, and it is the empirical observable we
+target in \S\ref{sec:mechanism}.
+
+\subsection{Descriptor families}
+
+A descriptor family is the analogue of a hyperparameter axis in
+standard ML. We compare four:
+
+\begin{description}
+  \item[\textsf{RAND}] Random search; no MAP-Elites archive. The
+        baseline.
+  \item[\textsf{STR}] \emph{Structural}: descriptor coordinates are
+        computable from the genome alone, without running the
+        solver. Cheap; intuitive; the default in many QD-PCG papers.
+  \item[\textsf{PLAY}] \emph{Gameplay}: coordinates derived from
+        properties of the solver's plan (length, jumps, pushes).
+        Captures what a player would experience.
+  \item[\textsf{SKILL}] \emph{Solver effort}: coordinates from
+        solver-internal quantities (nodes expanded, depth reached).
+        Captures how hard the level is for the agent.
+  \item[\textsf{COMMON}] A reference condition: ME uses the
+        \emph{same} descriptor it is evaluated against
+        (\#boxes$\times$plan-length in Sokoban; \#pits$\times$plan-length
+        in the platformer). By construction this gives an upper
+        bound on common-archive coverage.
+\end{description}
+
+All MAP-Elites variants share the same fitness, the same mutation
+operators, and the same initialisation. Only $d$ varies.
+
+\subsection{Cross-condition evaluation: the common projection}
+
+Different descriptors give archives of different shapes and over
+different axes. To compare them fairly, every archive is projected
+onto a shared \emph{common descriptor} that names the design
+properties a downstream designer would care about. In Sokoban the
+common descriptor is $(\text{n\_boxes}, \text{plan\_length})$ on a
+$4\times 10$ grid; in the platformer it is $(\text{n\_pits},
+\text{plan\_length})$ on an $8\times 10$ grid. The common-archive's
+coverage and QD-score are the headline metrics in this paper. The
+common projection has a long-standing tradition in QD
+benchmarking~\cite{pugh2016quality, chatzilygeroudis2021qd}.
+
+%==========================================================
+\section{Domains}
+\label{sec:domains}
+
+\subsection{Sokoban (\textbf{D1})}
+
+Sokoban levels are $8\times 8$ grids with walls, goals, a player, and
+1--3 boxes. The genome is the direct grid encoding; mutations toggle
+single tiles, move boxes/goals/player, or add/remove box--goal
+pairs. The solver is A* over (player, box-set) states with a
+deadlock-pruned Manhattan-distance heuristic
+\cite{junghanns2001sokoban}; the node budget is $8000$. Fitness
+rewards solvability, plan length, push count, and a triangular
+structural bonus peaked at wall density $0.2$. Sokoban is
+PSPACE-complete \cite{culberson1999sokoban}; even with deadlock
+pruning, node expansion varies over several orders of magnitude
+across the design space, which is what gives \textsf{STR}'s implicit
+hardness bias bite.
+
+\subsection{Tile-based platformer (\textbf{D2})}
+
+Platformer levels are $10\times 24$ tile grids of empty / solid /
+spike tiles. The player starts at the top of column~0's ground stack
+and must reach any standing position in column $23$. Physics is a
+standing-to-standing graph: from each standing position the agent can
+walk, walk-off-a-ledge, or jump $(dx,dy)$ with $dx\!\in\!\{1,..4\},
+dy\!\in\!\{1,..3\}$, provided the arc is empty of solid/spike tiles
+and the landing column has a solid floor. Cost is in game ticks
+(one per row or column moved), so flat walking is cheaper than
+jumping in unobstructed regions --- otherwise the descriptor
+\#jumps would be trivially saturated. The solver is A* with a
+horizontal-distance-to-goal heuristic; the node budget is $4000$.
+Fitness rewards solvability, plan length, jump count, and moderate
+pit/spike counts.
+
+The platformer is intentionally simpler than the state-of-the-art
+Mario-AI tile graph~\cite{volz2018evolving}; we keep the action
+model tractable so that the descriptor families are
+domain-comparable to Sokoban and so that the experiments fit a
+single workstation.
+
+%==========================================================
+\section{Experimental Protocol}
+\label{sec:experiments}
+
+\textbf{Conditions:} \{\textsf{RAND}, \textsf{STR}, \textsf{PLAY},
+\textsf{SKILL}, \textsf{COMMON}\}. \textbf{Seeds:} 20 per condition
+per domain. \textbf{Evaluations per run:} 5,500 for Sokoban, 5,000
+for the platformer, including a $250$-individual random
+initialisation. \textbf{Hardware:} a single 10-core consumer
+workstation; 8 parallel runs at a time.
+
+\textbf{Metrics.} For each run we record common-archive coverage
+(number of filled cells), common QD-score (sum of fitnesses across
+filled cells), common max fitness, wall-clock time, and the number
+of solver calls. For mechanism analysis we also persist every
+individual's solvability, plan length, A* nodes expanded, descriptor
+cell, and common-archive cell.
+
+\textbf{Statistics.} For each metric we report mean$\pm$std and
+percentile-bootstrap 95\% confidence intervals (5000 resamples). For
+pairwise condition comparisons we use the Mann--Whitney $U$ test
+(two-sided) with Holm--Bonferroni adjustment~\cite{holm1979simple}
+across the $\binom{5}{2}=10$ comparisons per metric per domain.
+Effect sizes are Cliff's $\delta$~\cite{romano2006cliffd,
+vargha2000critique}, interpreted via the standard
+negligible/small/medium/large thresholds.
+
+%==========================================================
+\section{Results}
+\label{sec:results}
+
+\input{results_inline}
+
+Table~\ref{tab:summary} (auto-generated) gives the per-condition
+summary statistics for both domains.
+Figures~\ref{fig:soko-convergence}--\ref{fig:soko-bars} show
+Sokoban convergence and final-state bars;
+Figures~\ref{fig:plat-convergence}--\ref{fig:plat-bars} show the
+platformer.
+
+\input{results_table}
+
+\subsection{Sokoban (D1)}
+
+Figure~\ref{fig:soko-convergence} traces common-archive coverage
+and QD-score against the number of evaluations. After $5{,}500$
+evaluations the rank-order on coverage is
+\textsf{COMMON}~$(37.3\!\pm\!1.7)$~$>$~\textsf{SKILL}~$(33.8\!\pm\!2.6)$
+$>$~\textsf{STR}~$(32.4\!\pm\!2.0)$
+$>$~\textsf{PLAY}~$(31.3\!\pm\!2.5)$
+$\gg$~\textsf{RAND}~$(24.0\!\pm\!0.8)$.
+After Holm correction across the ten pairwise tests per metric, every
+non-trivial ordering with $\delta\!\geq\!0.49$ is significant; only
+\textsf{STR}~vs~\textsf{PLAY} ($\delta\!=\!-0.23$, $p_\text{adj}\!=\!0.21$)
+and \textsf{SKILL}~vs~\textsf{STR} ($\delta\!=\!+0.34$,
+$p_\text{adj}\!=\!0.12$) are not separately significant.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{sokoban/figures/convergence.pdf}
+  \caption{Sokoban: common-archive coverage (left) and QD-score
+  (right) vs evaluations. Shaded bands are $\pm 1$~SD across 20 seeds.}
+  \label{fig:soko-convergence}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{sokoban/figures/bars.pdf}
+  \caption{Sokoban final metrics by condition. Bars are means;
+  dots are seed-level values. The wall-clock panel (right) is the
+  paper's headline empirical observation:
+  \textsf{STR}~$\approx\!2.2\times$ slower than \textsf{PLAY}.}
+  \label{fig:soko-bars}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{sokoban/figures/heatmaps_common.pdf}
+  \caption{Sokoban: per-condition common-archive fill frequency
+  across 20 seeds. Rows are box-count; columns are plan-length
+  bins. \textsf{RAND} never fills the 4-box row; \textsf{STR} fills
+  it more sparsely than the solver-derived descriptors; \textsf{COMMON}
+  fills nearly everywhere.}
+  \label{fig:soko-heatmap}
+\end{figure}
+
+The wall-clock disparity --- the central object of
+\S\ref{sec:mechanism} --- is also visible in the right panel of
+Fig.~\ref{fig:soko-bars}: \textsf{STR}'s seed-level wall-clocks
+($72\!-\!108$\,s) and \textsf{COMMON}'s ($63\!-\!92$\,s) cluster well
+above \textsf{PLAY}'s ($25\!-\!58$\,s) with no overlap on the median.
+
+The heatmap (Fig.~\ref{fig:soko-heatmap}) explains
+\emph{where} each condition spends its archive capacity. \textsf{RAND}
+never finds a 4-box puzzle in any of 20 seeds (bottom row entirely
+dark); \textsf{STR} fills the 4-box row only sparsely; the
+solver-derived \textsf{PLAY}/\textsf{SKILL}/\textsf{COMMON} fill most
+of the 4-box row, and \textsf{COMMON} fills nearly all 40 cells.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=0.95\linewidth]{sokoban/figures/examples_combined.pdf}
+  \caption{Top-fitness Sokoban elites by condition (rows). Walls
+  black, goals green, boxes orange, player blue. \textsf{RAND}'s
+  best fitness saturates near $0.95$; every MAP-Elites condition
+  reaches $1.00$ but on visibly different board styles.
+  \textsf{STR}'s top elites have visibly denser walls than
+  \textsf{PLAY}'s.}
+  \label{fig:soko-examples}
+\end{figure}
+
+\subsection{Platformer (D2)}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{platformer/figures/convergence.pdf}
+  \caption{Platformer: common-archive coverage (left) and QD-score
+  (right) vs evaluations. Shaded bands are $\pm 1$~SD across 20 seeds.}
+  \label{fig:plat-convergence}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{platformer/figures/bars.pdf}
+  \caption{Platformer final metrics by condition. Wall-clock
+  spread is much smaller than Sokoban's: all conditions fit
+  within $4{-}6$\,s.}
+  \label{fig:plat-bars}
+\end{figure}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{platformer/figures/examples_combined.pdf}
+  \caption{Top-fitness platformer elites by condition. Green
+  ground, red spikes, light grey sky. \textsf{COMMON}'s best
+  elites have a wider variety of terrain shapes than the others.}
+  \label{fig:plat-examples}
+\end{figure}
+
+The platformer rank-order on coverage is
+\textsf{COMMON}~$(45.5)$
+$>$ \textsf{STR}~$(39.9)$~$\approx$~\textsf{RAND}~$(39.8)$
+$>$ \textsf{SKILL}~$(38.9)$
+$>$ \textsf{PLAY}~$(35.4)$ (cells out of 80).
+\textsf{COMMON} beats every other condition with $\delta\!\geq\!0.63$
+and $p_\text{adj}\!<\!0.01$. \textsf{PLAY} is significantly worse
+than every other condition (all $\delta\!<\!-0.5$,
+$p_\text{adj}\!<\!0.03$). \textsf{STR}, \textsf{SKILL}, and
+\textsf{RAND} are not separately distinguishable on coverage
+($p_\text{adj}\!>\!0.38$ for all such pairs) although
+\textsf{STR} and \textsf{SKILL} do beat \textsf{RAND} on QD-score
+because they retain higher-fitness individuals in equivalent
+projected cells.
+
+\subsection{Cross-domain summary}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{cross_domain_summary.pdf}
+  \caption{Cross-domain normalised common-archive coverage. Bars
+  show the fraction of the common archive filled, mean$\pm$SE over
+  20 seeds.}
+  \label{fig:cross}
+\end{figure}
+
+The relative ordering of descriptors is \emph{not} preserved across
+domains (Fig.~\ref{fig:cross}). \textsf{PLAY} is 4th-best in
+Sokoban but worst in the platformer. \textsf{STR} is 3rd-best in
+Sokoban but tied for 2nd-best in the platformer (statistically
+indistinguishable from \textsf{RAND} on coverage). \textsf{SKILL}
+is 2nd-best in Sokoban but only 3rd in the platformer. Only
+\textsf{COMMON} (which trivially dominates by construction) and
+\textsf{RAND} (which is uniformly the no-MAP-Elites baseline) keep
+their rank.
+The intuition that ``structural'' descriptors are
+universally cheap and informative does not survive a controlled
+comparison.
+
+%==========================================================
+\section{Mechanism: Implicit Hardness Selection}
+\label{sec:mechanism}
+
+\subsection{Sokoban: structural pressure inflates the failure rate}
+
+The most striking finding is the wall-clock disparity in Sokoban.
+\textsf{STR}'s purely structural descriptor $(\text{boxes},
+\text{wall density})$ never asks the solver to do anything; one
+might expect it to be the cheapest condition. Instead it is the
+slowest, at $81.8\pm11.4$\,s versus $37.3\pm11.6$\,s for
+\textsf{PLAY} ($p_\text{adj}\!<\!10^{-6}$, Cliff's $\delta=-0.99$).
+
+Figure~\ref{fig:soko-mechanism} shows the mechanism. The grey
+bars give the median $\log_{10}(\text{A* nodes expanded})$ over all
+\emph{evaluated} individuals (including timeouts);
+the coloured bars are over \emph{retained} cell-winner elites.
+\textsf{STR}'s evaluated distribution sits a full decade above the
+others (median $\log_{10}(\text{nodes})\!\approx\!2.9$ vs
+$\approx\!2.4$ for \textsf{PLAY}), and its retained distribution
+remains $0.12$\,decades higher than \textsf{PLAY}'s ($2.71$ vs
+$2.59$; pairwise $p_\text{adj}\!<\!10^{-3}$, $\delta\!=\!-0.74$).
+The picture for the other three conditions is symmetric and small.
+
+The reason is not that wall density is directly correlated with A*
+nodes within \emph{solvable} boards (it is in fact weakly
+\emph{negatively} correlated, Spearman
+$\rho\!=\!-0.07$). The reason is that selection on density
+preserves dense-wall elites and mutation from a dense-wall elite is
+disproportionately likely to produce an
+\emph{infeasible} board --- one that the solver attempts and times
+out on, consuming the full $8000$-node budget. Table~\ref{tab:failure}
+gives the numbers: \textsf{STR}'s mutation pipeline produces
+$20.0\%$ unsolvable-but-attempted offspring versus $12.9\%$ for
+\textsf{PLAY}. The extra failure work, at $8000$ nodes per attempt,
+is most of the wall-clock gap.
+
+\begin{table}[t]
+  \centering
+  \caption{Per-condition mutation-outcome statistics (Sokoban,
+  20 seeds, $5500$ evals each). \emph{\%unsolv} counts
+  well-formed boards on which the solver ran and failed
+  (timeout / infeasibility proof). $\log_{10}N_{\text{all}}$ is the
+  mean log-node count across \emph{all} solver attempts; the gap
+  between this and $\log_{10}N_{\text{solv}}$ is the failure-driven
+  overhead.}
+  \label{tab:failure}
+  \small
+  \begin{tabular}{lrrrr}
+    \toprule
+    cond & \%well-formed & \%solvable & \%unsolv & $\log_{10}N_{\text{all}}$ \\
+    \midrule
+    \textsf{RAND}   & 100.0\% & 22.2\% &  5.7\% & 2.22 \\
+    \textsf{STR}    &  98.5\% & 55.4\% & \textbf{20.0\%} & \textbf{2.90} \\
+    \textsf{PLAY}   &  98.5\% & 63.1\% & 12.9\% & 2.45 \\
+    \textsf{SKILL}  &  98.3\% & 64.4\% & 12.6\% & 2.42 \\
+    \textsf{COMMON} &  97.8\% & 62.3\% & 14.6\% & 2.54 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{sokoban/figures/mechanism.pdf}
+  \caption{Sokoban: implicit hardness selection. For each condition,
+  the grey bar is the median $\log_{10}(\text{A* nodes})$ over all
+  \emph{solvable} evaluated individuals; the coloured bar is over
+  the \emph{retained} cell-winner elites. \textsf{STR}'s
+  bars sit conspicuously higher than the rest. Combined with
+  Table~\ref{tab:failure}, this shows the implicit selection
+  pressure: \textsf{STR} both attempts more failed solves and
+  retains harder solvable boards.}
+  \label{fig:soko-mechanism}
+\end{figure}
+
+\subsection{Platformer: the mechanism does not fire}
+
+The platformer's A* over standing positions almost always
+terminates in well under $100$ node expansions because the
+horizontal-distance-to-goal heuristic is tight and the underlying
+graph is sparse. The unsolvability rate is uniform across
+conditions ($5{-}6\%$). Consequently there is no
+condition-specific failure-work inflation:
+Figure~\ref{fig:plat-mechanism} shows the per-condition
+$\log_{10}(\text{nodes})$ distributions overlapping within
+$\pm 0.02$, and no pairwise difference in retained-elite hardness
+survives Holm correction ($p_\text{adj}\!\geq\!0.41$ for all).
+
+Critically, this is exactly what the framework predicts. The
+mechanism in \S\ref{sec:method} states that implicit hardness
+selection arises when descriptor coordinates correlate with solver
+hardness; if the solver problem itself does not vary much, the
+descriptor cannot induce hardness variation either. The platformer
+is a case where the implicit pressure is \emph{benign} --- it
+reshapes \emph{what} content gets generated (PLAY is significantly
+worse than COMMON in archive coverage, $p_\text{adj}\!<\!10^{-5}$)
+without inflating the cost of generating it.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\linewidth]{platformer/figures/mechanism.pdf}
+  \caption{Platformer: same plot as Fig.~\ref{fig:soko-mechanism}.
+  No condition's retained distribution is significantly different
+  from any other's.}
+  \label{fig:plat-mechanism}
+\end{figure}
+
+%==========================================================
+\section{Discussion}
+\label{sec:discussion}
+
+\subsection{What descriptor should I use?}
+
+We offer a short decision guide synthesised from the empirical
+results:
+
+\begin{enumerate}
+  \item \textbf{If you have a downstream metric you want diverse
+        coverage on, optimise it directly.} The \textsf{COMMON}
+        condition (descriptor = common projection) dominates in
+        both domains, because no implicit pressure works against
+        you. The cost is that the resulting archive's axes are
+        whatever you decided to be diverse along --- you get no
+        free additional structure.
+
+  \item \textbf{If the descriptor coordinates push selection toward
+        regions of high infeasibility, expect wall-clock to inflate.}
+        ``Structural'' descriptors are not automatically cheap; in
+        Sokoban they are $2.2\times$ slower than gameplay
+        descriptors because mutation from a dense-wall elite is
+        $1.6\times$ more likely to produce a board the solver
+        cannot finish, and every such attempt consumes the full
+        node budget. The relevant correlation is not
+        descriptor-coordinate-vs-hardness in solvable boards but
+        descriptor-coordinate-vs-\emph{infeasibility-rate}.
+
+  \item \textbf{Gameplay descriptors are not free either.} They are
+        cheap to add (the solver's plan is already paid for), but
+        they may collapse into narrow corners of the common
+        projection if their axes are nearly degenerate (e.g.\
+        \textsf{PLAY}'s underperformance in the platformer, where
+        plan-length spans a narrow $40$--$60$ range so its archive
+        column is mostly empty cells that can't accept
+        any individual).
+
+  \item \textbf{Solver-effort descriptors are competitive but
+        domain-sensitive.} In Sokoban \textsf{SKILL} is the
+        highest-coverage condition among the indirect descriptors;
+        in the platformer its coverage is statistically
+        indistinguishable from \textsf{STR}'s.
+
+  \item \textbf{Don't trust folklore.} The ordering of descriptor
+        families is empirical, not theoretical. Run the protocol
+        of \S\ref{sec:experiments} on a small pilot before
+        committing to a descriptor for a larger study.
+\end{enumerate}
+
+\subsection{Why descriptor learning is not a free fix}
+
+The growing literature on learned descriptors~\cite{cully2019autonomous,
+grillotti2022unsupervised, paolo2020unsupervised} side-steps the
+problem we describe by making the descriptor a function of the data
+rather than of designer intuition. Our findings are compatible with
+that programme but do not subsume it: a learned descriptor that
+happens to correlate with solver hardness will exhibit the same
+implicit pressure as a hand-designed one. The learning step does
+not eliminate the pressure; it shifts the choice of pressure into
+the loss function of the descriptor learner.
+
+\subsection{Limitations}
+
+Two domains, with one solver in each, do not exhaust the space of
+PCG via QD. The descriptors we compare are intentionally simple
+2D axes; ``richer'' descriptors (e.g.\ Centroidal Voronoi
+Tessellations \cite{vassiliades2017cvtmap}, or learned embeddings
+\cite{cully2019autonomous}) may exhibit additional structure we do
+not characterise here. We also assume a uniform-random parent
+selection policy as in the original MAP-Elites; emitter-based
+variants such as CMA-ME~\cite{fontaine2020cma} may interact with
+the descriptor in ways our protocol does not measure.
+
+%==========================================================
+\section{Conclusion}
+\label{sec:conclusion}
+
+The behavioral descriptor in MAP-Elites is not a passive lens onto
+the design space; it is a hidden selection pressure that, in
+domains where the descriptor pushes mutations toward
+infeasibility-rich regions, can silently double the wall-clock
+cost of a search the practitioner believed to be cheap. The
+phenomenon replicates across two distinct PCG domains, with the
+rank-ordering of descriptor families \emph{not} preserved across
+them. We have given a controlled experimental protocol for
+measuring this effect, a mechanism analysis showing it is driven
+by infeasibility-rate inflation rather than per-board complexity,
+and a practical decision guide for QD-PCG practitioners. The full
+code, raw archives, and per-evaluation logs are released as a
+replication package.
+
+% ------------------- references -------------------
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\end{document}

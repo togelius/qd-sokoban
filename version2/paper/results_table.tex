@@ -1,0 +1,25 @@
+\begin{table*}[t]
+\centering
+\caption{Per-condition summary statistics. mean$\pm$SD across 20 seeds; bootstrap 95\% CIs for the mean in parentheses.}
+\label{tab:summary}
+\small
+\begin{tabular}{l l rrr rrr}
+\toprule
+ & & \multicolumn{3}{c}{Common coverage} & \multicolumn{3}{c}{Common QD-score} \\
+\cmidrule(lr){3-5} \cmidrule(lr){6-8}
+domain & cond & mean$\pm$SD & 95\% CI & wall (s) & mean$\pm$SD & 95\% CI & solver calls \\
+\midrule
+Sokoban & \textsf{RAND} & 23.95$\pm$0.83 & [23.60, 24.30] & 11.2 & 15.19$\pm$0.59 & [14.94, 15.45] & 5500 \\
+Sokoban & \textsf{STR} & 32.40$\pm$2.04 & [31.55, 33.35] & 81.8 & 22.97$\pm$1.00 & [22.55, 23.41] & 5417 \\
+Sokoban & \textsf{PLAY} & 31.25$\pm$2.53 & [30.20, 32.35] & 37.3 & 21.54$\pm$1.84 & [20.76, 22.31] & 5416 \\
+Sokoban & \textsf{SKILL} & 33.75$\pm$2.61 & [32.65, 34.90] & 49.8 & 23.44$\pm$1.80 & [22.67, 24.22] & 5404 \\
+Sokoban & \textsf{COMMON} & 37.30$\pm$1.66 & [36.55, 38.00] & 76.5 & 25.76$\pm$1.06 & [25.29, 26.21] & 5382 \\
+\midrule
+Platformer & \textsf{RAND} & 39.75$\pm$1.52 & [39.10, 40.40] & 6.2 & 33.98$\pm$1.22 & [33.46, 34.48] & 5000 \\
+Platformer & \textsf{STR} & 39.90$\pm$4.56 & [37.90, 41.80] & 5.5 & 35.31$\pm$4.05 & [33.55, 36.99] & 5000 \\
+Platformer & \textsf{PLAY} & 35.40$\pm$2.89 & [34.15, 36.65] & 4.8 & 30.96$\pm$2.55 & [29.87, 32.05] & 5000 \\
+Platformer & \textsf{SKILL} & 38.90$\pm$3.68 & [37.35, 40.50] & 5.7 & 34.27$\pm$3.13 & [32.95, 35.62] & 5000 \\
+Platformer & \textsf{COMMON} & 45.45$\pm$3.98 & [43.70, 47.15] & 4.3 & 40.68$\pm$3.57 & [39.12, 42.19] & 5000 \\
+\bottomrule
+\end{tabular}
+\end{table*}

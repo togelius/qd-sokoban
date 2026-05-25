@@ -1,0 +1,28 @@
+\input{results_table.tex}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\linewidth]{convergence.pdf}
+\caption{Common-archive QD-score over evaluations. Lines are means across 10 seeds; bands are $\pm 1$ std. The three MAP-Elites variants overlap; random search is well below.}
+\label{fig:convergence}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{common_heatmaps.pdf}
+\caption{Mean fitness in each cell of the common archive $(n_\text{boxes}, \text{plan length})$ averaged across 10 seeds. Numbers in cells are the count of seeds that ever filled that cell. White = never filled. Note how random search fails to fill the long-plan column at the right, while all three MAP-Elites variants reach those cells; \\textsc{ME-Str} concentrates fitness in the middle-density region; \\textsc{ME-Skill} extends furthest right and fills more 3-/4-box cells.}
+\label{fig:heatmaps}
+\end{figure*}
+
+\begin{figure*}[t]
+\centering
+\includegraphics[width=\linewidth]{examples_combined.pdf}
+\caption{Four high-fitness elites per condition, drawn from the common archive. Brown squares are boxes, yellow circles are goals, green squares are boxes already on goals, blue circle is the player. $L$: A$^*$ plan length, $P$: number of pushes in the plan, $B$: number of boxes.}
+\label{fig:examples}
+\end{figure*}
+
+\paragraph{Quantitative comparison.} Table~\ref{tab:main} summarises the four conditions. All three MAP-Elites variants beat random search on every metric ($p<0.001$, Mann-Whitney U). On common coverage, \textsc{ME-Skill} is the strongest variant (33.8/40 vs. 31.5 for \textsc{ME-Str} and 31.3 for \textsc{ME-Play}; $p<0.05$ in both pairwise tests). \textsc{ME-Str} and \textsc{ME-Play} do not differ significantly on coverage or QD-score. 
+\paragraph{Hard-cell coverage.} We define the \emph{hard region} of the common archive as the 16 cells with plan length $\geq 14$ -- the puzzles a designer is most likely to actually ship. On this restricted region the descriptor effect sharpens: \textsc{ME-Skill} fills 13.5/16 cells, \textsc{ME-Play} 13.1, \textsc{ME-Str} 15.2, and random search only 8.6. Random search is essentially incapable of finding the three- and four-box hard puzzles. Among the MAP-Elites variants, the two solver-based descriptors (\textsc{ME-Play}, \textsc{ME-Skill}) dominate the hard region, confirming that descriptors that explicitly index gameplay properties push the search where designers actually want it.
+\paragraph{Wall-clock cost.} The structural descriptor, naively the cheapest because it requires no solver call beyond the one used for fitness, is in fact the slowest condition (68s per run, vs. 27s for \textsc{ME-Play} and 35s for \textsc{ME-Skill}). The cause is selection bias: \textsc{ME-Str}'s second axis is wall density, and it preferentially samples dense boards from its archive; A$^*$ on a dense $8\times 8$ Sokoban runs many more node expansions than on a sparse one. Solver calls are nearly identical across conditions; only the per-call cost differs.
+\paragraph{Where coverage is placed.} Figure~\ref{fig:heatmaps} shows the per-cell mean fitness of the common archive, averaged across seeds. Random search reliably fills the easy short-plan, 1--2 box corner but never reaches the long-plan column at the right, and barely touches the 4-box row. All three MAP-Elites variants fill the 4-box row, with \textsc{ME-Str} filling it most uniformly. \textsc{ME-Str}'s wall-density axis is correlated with plan length (denser rooms force longer paths), so its archive collapses toward the long-plan cells -- the result is the strongest hard-cell coverage of any condition. \textsc{ME-Skill} achieves the highest \emph{overall} coverage by filling more of the medium-length cells, leveraging the relative orthogonality of plan length and search-node count as descriptor axes. \textsc{ME-Play} sits between the two.
+\paragraph{Qualitative inspection.} Figure~\ref{fig:examples} shows four high-fitness elites per condition. \textsc{ME-Str} examples tend to be dense with internal walls. \textsc{ME-Play} produces long-plan puzzles with 1--2 boxes that walk the player around the board. \textsc{ME-Skill} produces puzzles with more boxes and more constrained corridors -- visually denser in choice points. Random examples are simple, with one or two boxes and short obvious paths.

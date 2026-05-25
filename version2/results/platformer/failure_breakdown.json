@@ -1,0 +1,42 @@
+{
+  "RAND": {
+    "n_eval": 100000,
+    "frac_well_formed": 1.0,
+    "frac_solvable": 0.87647,
+    "frac_unsolvable_attempted": 0.12353,
+    "mean_logn_all_attempted": 1.2717965316938733,
+    "mean_logn_solvable": 1.347030017586357
+  },
+  "STR": {
+    "n_eval": 100000,
+    "frac_well_formed": 1.0,
+    "frac_solvable": 0.94068,
+    "frac_unsolvable_attempted": 0.05932,
+    "mean_logn_all_attempted": 1.265967802349452,
+    "mean_logn_solvable": 1.2934905047171652
+  },
+  "PLAY": {
+    "n_eval": 100000,
+    "frac_well_formed": 1.0,
+    "frac_solvable": 0.95028,
+    "frac_unsolvable_attempted": 0.04972,
+    "mean_logn_all_attempted": 1.2896559862976498,
+    "mean_logn_solvable": 1.3126899178694027
+  },
+  "SKILL": {
+    "n_eval": 100000,
+    "frac_well_formed": 1.0,
+    "frac_solvable": 0.94309,
+    "frac_unsolvable_attempted": 0.05691,
+    "mean_logn_all_attempted": 1.2767305938960702,
+    "mean_logn_solvable": 1.3041886671144811
+  },
+  "COMMON": {
+    "n_eval": 100000,
+    "frac_well_formed": 1.0,
+    "frac_solvable": 0.93764,
+    "frac_unsolvable_attempted": 0.06236,
+    "mean_logn_all_attempted": 1.2658945170031155,
+    "mean_logn_solvable": 1.2958745638307827
+  }
+}
