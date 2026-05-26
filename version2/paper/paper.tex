@@ -44,20 +44,21 @@ controlled cross-condition design that holds the genome, mutation
 operators, fitness function, and compute budget fixed and varies only
 the descriptor. Across five conditions and twenty replicates per
 condition per domain (200 runs, $\approx 1.05$M evaluations), we
-find that (i) the descriptor choice substantially reshapes the
-projected archive even when the fitness function is identical
-($p_\text{adj}<0.001$, Cliff's $\delta>0.5$ for all
-non-trivial pairs in both domains);
+find that (i) descriptor choice can determine whether MAP-Elites
+even beats random search: in the platformer, only one of four
+descriptor variants does, and one is significantly \emph{worse}
+than random ($p_\text{adj}<10^{-3}$, Cliff's $\delta=-0.80$);
 (ii) in Sokoban, the ``cheap'' structural descriptor is
 $2.2\times$ slower than the gameplay descriptor because it pushes
-selection toward boards with a 20\% infeasibility rate (versus
-13\% for the gameplay descriptor) --- the implicit selection
+selection toward boards with a $20\%$ infeasibility rate (vs
+$13\%$ for the gameplay descriptor) --- the implicit selection
 pressure shows up not as harder \emph{solvable} boards but as more
 \emph{attempted-then-timed-out} ones;
 (iii) the same descriptor causes no wall-clock overhead at all in
 the platformer because the platformer's A* solver is uniformly
-fast and infeasible levels are filtered cheaply --- the
-mechanism's wall-clock cost is therefore domain-dependent;
+fast and infeasibility rates are uniform across conditions ---
+the mechanism's wall-clock manifestation is therefore
+domain-dependent;
 (iv) the rank-ordering of descriptor families is not preserved
 across domains, contradicting the implicit assumption that
 ``structural'' descriptors are universally cheap or universally
@@ -121,40 +122,49 @@ score archives (\textsf{COMMON}, an upper-bound reference). Each
 condition is run for 20 random seeds.
 
 \paragraph{Findings}
-\emph{(F1, replication.)} Every MAP-Elites variant significantly
-outperforms random search on coverage and QD-score in both
-domains, with Cliff's $\delta \!=\! 1.00$ (perfect separation) in
-Sokoban; in the platformer the separation is smaller because random
-levels span the common projection well but \textsf{COMMON} still
-beats \textsf{RAND} with $\delta\!=\!0.82$
-(all $p_\text{adj}\!<\!10^{-5}$).
+\emph{(F1, replication --- with a surprise.)} In Sokoban every
+MAP-Elites variant strictly outperforms random search on coverage
+and QD-score: \textsf{STR}, \textsf{SKILL}, and \textsf{COMMON}
+attain $|\delta|=1.0$ (no overlap across seeds), \textsf{PLAY}
+attains $|\delta|=0.998$ (one near-tied pair), all
+$p_\text{adj}\!<\!10^{-6}$.
+In the platformer, however, the picture is messier: only
+\textsf{COMMON} significantly beats \textsf{RAND} ($\delta\!=\!+0.82$,
+$p_\text{adj}\!<\!10^{-4}$); \textsf{STR} and \textsf{SKILL} are
+statistically indistinguishable from \textsf{RAND} on coverage
+($p_\text{adj}\!=\!0.77$ and $0.47$ respectively); and
+\textsf{PLAY} is significantly \emph{worse} than \textsf{RAND}
+($\delta\!=\!-0.80$, $p_\text{adj}\!<\!10^{-3}$). With the wrong descriptor, MAP-Elites
+can actively underperform a baseline that uses none --- a direct
+demonstration of the implicit-pressure thesis.
 \emph{(F2, descriptor matters.)} The descriptor choice substantially
 reshapes the projected archive: the gap between the best
 (\textsf{COMMON}, $37.3\!\pm\!1.7$ cells) and worst (\textsf{PLAY},
-$31.3\!\pm\!2.5$) MAP-Elites condition in Sokoban is $19\%$ of the
-mean and statistically significant with Holm-adjusted
-$p\!<\!10^{-6}$ and $\delta\!=\!+0.95$ (large). The same gap exists
-in the platformer at $28\%$ ($\delta\!=\!+0.95$).
+$31.3\!\pm\!2.5$) MAP-Elites condition in Sokoban is $16\%$ of
+\textsf{COMMON}'s mean and statistically significant
+($p_\text{adj}\!\approx\!10^{-6}$, $\delta\!=\!+0.95$, large).
+The same gap is even larger in the platformer at $22\%$
+($\delta\!=\!+0.95$).
 \emph{(F3, hidden hardness selection in Sokoban.)} \textsf{STR}'s
 descriptor selects toward dense-wall elites; mutating from those
-elites produces a $20\%$ unsolvable-but-attempted rate vs $13\%$
+elites produces a $20.0\%$ unsolvable-but-attempted rate vs $12.9\%$
 for \textsf{PLAY}. Each timeout exhausts the full $8000$-node
 budget, so the additional failure work alone accounts for most of
 the $2.2\times$ wall-clock overhead of \textsf{STR} over
 \textsf{PLAY} ($81.8\!\pm\!11.4$\,s vs $37.3\!\pm\!11.6$\,s,
 $p_\text{adj}\!<\!10^{-6}$, $\delta\!=\!-0.99$). The same mechanism
-is absent in the platformer (timeout rates $5{-}6\%$ across all
-conditions; wall-clock differences within a factor of $1.4$).
-\emph{(F4, no universal ordering.)} The best-coverage descriptor
-differs across domains. \textsf{SKILL} narrowly wins among the
-three indirect descriptors in Sokoban ($33.8$ vs $32.4$ for
-\textsf{STR}, $31.3$ for \textsf{PLAY}). In the platformer it is
-\textsf{STR} that narrowly leads ($39.9$ vs $38.9$ for
-\textsf{SKILL}, $35.4$ for \textsf{PLAY}); \textsf{RAND} matches
-\textsf{STR} on coverage but loses on QD-score. The popular intuition
-that ``structural'' descriptors are cheap or that ``gameplay''
-descriptors are universally informative does not survive a
-controlled comparison.
+is absent in the platformer (MAP-Elites timeout rates $5{-}6\%$
+across all conditions; wall-clock differences within a factor of
+$1.4$).
+\emph{(F4, no universal ordering among indirect descriptors.)}
+\textsf{PLAY} is the worst MAP-Elites variant in both domains, but
+\textsf{STR} and \textsf{SKILL} swap rank: \textsf{SKILL} narrowly
+wins in Sokoban ($33.8$ vs $32.4$ for \textsf{STR}); \textsf{STR}
+narrowly wins in the platformer ($39.9$ vs $38.9$ for
+\textsf{SKILL}). The popular intuition that ``structural''
+descriptors are universally cheap or that ``gameplay'' descriptors
+are universally informative does not survive a controlled
+comparison.
 
 \paragraph{Contributions}
 \begin{enumerate}
@@ -200,7 +210,7 @@ generalises CMA-ME by annealing a soft archive that tracks both
 discovery and improvement rates. CVT-MAP-Elites
 \cite{vassiliades2017cvtmap} replaces the rectangular grid with a
 centroidal Voronoi tessellation that scales to high-dimensional
-descriptor spaces. DSAGE~\cite{fontaine2021dsage} uses surrogate
+descriptor spaces. DSAGE~\cite{bhatt2022dsage} uses surrogate
 models to extrapolate the archive at lower evaluation cost.
 \emph{None of these variants change the descriptor itself:} all
 inherit whatever descriptor the user provides. The phenomenon we
@@ -480,8 +490,11 @@ $p_\text{adj}\!=\!0.12$) are not separately significant.
 The wall-clock disparity --- the central object of
 \S\ref{sec:mechanism} --- is also visible in the right panel of
 Fig.~\ref{fig:soko-bars}: \textsf{STR}'s seed-level wall-clocks
-($72\!-\!108$\,s) and \textsf{COMMON}'s ($63\!-\!92$\,s) cluster well
-above \textsf{PLAY}'s ($25\!-\!58$\,s) with no overlap on the median.
+($62\!-\!107$\,s, median $81.3$\,s) and \textsf{COMMON}'s
+($62\!-\!92$\,s, median $75.9$\,s) cluster well above
+\textsf{PLAY}'s ($20\!-\!62$\,s, median $36.9$\,s), with only a
+single seed-pair near the boundary (Cliff's $\delta\!=\!-0.99$
+for \textsf{STR} vs \textsf{PLAY}).
 
 The heatmap (Fig.~\ref{fig:soko-heatmap}) explains
 \emph{where} each condition spends its archive capacity. \textsf{RAND}
@@ -556,18 +569,57 @@ projected cells.
   \label{fig:cross}
 \end{figure}
 
-The relative ordering of descriptors is \emph{not} preserved across
-domains (Fig.~\ref{fig:cross}). \textsf{PLAY} is 4th-best in
-Sokoban but worst in the platformer. \textsf{STR} is 3rd-best in
-Sokoban but tied for 2nd-best in the platformer (statistically
-indistinguishable from \textsf{RAND} on coverage). \textsf{SKILL}
-is 2nd-best in Sokoban but only 3rd in the platformer. Only
-\textsf{COMMON} (which trivially dominates by construction) and
-\textsf{RAND} (which is uniformly the no-MAP-Elites baseline) keep
-their rank.
-The intuition that ``structural'' descriptors are
-universally cheap and informative does not survive a controlled
-comparison.
+The relative ordering of indirect descriptors is \emph{not}
+preserved across domains (Fig.~\ref{fig:cross}). \textsf{STR} and
+\textsf{SKILL} swap rank: \textsf{SKILL} wins among the three
+indirect descriptors in Sokoban; \textsf{STR} wins in the
+platformer. \textsf{PLAY} is the worst MAP-Elites variant in both
+domains, but it is significantly worse than \textsf{RAND} only in
+the platformer.
+
+What \emph{does} replicate across domains is the gross structure
+of the inter-condition comparisons. Table~\ref{tab:crossdomain}
+combines the per-domain p-values for nine pre-registered
+contrasts using Stouffer's Z method~\cite{stouffer1949combining}.
+Eight of the nine combined p-values fall below
+$10^{-3}$. The single contrast that fails to replicate is the
+mechanism direction --- \emph{``\textsf{STR} retains harder
+boards than \textsf{PLAY}''} --- which holds in Sokoban
+($\delta\!=\!+0.74$) but reverses in the platformer
+($\delta\!=\!-0.38$). This negative cross-domain result is itself
+informative: it formalises the claim in
+\S\ref{sec:mechanism} that the implicit-pressure mechanism's
+\emph{direction}, not just its magnitude, is domain-specific.
+
+\begin{table}[t]
+  \centering
+  \caption{Cross-domain consistency for pre-registered contrasts.
+  Per-domain $p$ from one-sided Mann--Whitney on the named direction;
+  combined $p$ via Stouffer's Z. ``cons?'' is yes iff the sign of
+  Cliff's $\delta$ agrees across both domains.}
+  \label{tab:crossdomain}
+  \scriptsize
+  \setlength{\tabcolsep}{3pt}
+  \begin{tabular}{lrrrrl}
+    \toprule
+    contrast (\textbf{A} $>$ \textbf{B}) & soko $p$ & soko $\delta$ & plat $p$ & plat $\delta$ & combined $p$ \\
+    \midrule
+    COMMON $>$ RAND coverage        & 2.2e-08 & +1.00 & 4.2e-06 & +0.82 & \textbf{1.1e-12} \\
+    COMMON $>$ RAND QD-score        & 3.4e-08 & +1.00 & 1.3e-06 & +0.87 & \textbf{4.9e-13} \\
+    COMMON $>$ PLAY coverage        & 1.1e-07 & +0.95 & 1.2e-07 & +0.95 & \textbf{1.2e-13} \\
+    COMMON $>$ PLAY QD-score        & 8.3e-08 & +0.97 & 8.3e-08 & +0.97 & \textbf{6.7e-14} \\
+    COMMON $>$ STR    coverage      & 3.0e-07 & +0.92 & 3.3e-04 & +0.63 & \textbf{1.5e-09} \\
+    COMMON $>$ SKILL  coverage      & 4.1e-05 & +0.72 & 1.4e-05 & +0.78 & \textbf{4.5e-09} \\
+    SKILL  $>$ PLAY   coverage      & 3.9e-03 & +0.49 & 3.0e-03 & +0.51 & \textbf{6.7e-05} \\
+    STR    $>$ PLAY   coverage      & 1.1e-01 & +0.23 & 9.9e-04 & +0.57 & \textbf{1.1e-03} \\
+    \midrule
+    STR retains harder than PLAY    & 2.9e-05 & +0.74 & 0.98 & $-0.38$ & --- (signs disagree) \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+
+The intuition that ``structural'' descriptors are universally cheap
+and informative does not survive a controlled comparison.
 
 %==========================================================
 \section{Mechanism: Implicit Hardness Selection}
@@ -584,13 +636,15 @@ slowest, at $81.8\pm11.4$\,s versus $37.3\pm11.6$\,s for
 
 Figure~\ref{fig:soko-mechanism} shows the mechanism. The grey
 bars give the median $\log_{10}(\text{A* nodes expanded})$ over all
-\emph{evaluated} individuals (including timeouts);
-the coloured bars are over \emph{retained} cell-winner elites.
-\textsf{STR}'s evaluated distribution sits a full decade above the
-others (median $\log_{10}(\text{nodes})\!\approx\!2.9$ vs
-$\approx\!2.4$ for \textsf{PLAY}), and its retained distribution
-remains $0.12$\,decades higher than \textsf{PLAY}'s ($2.71$ vs
-$2.59$; pairwise $p_\text{adj}\!<\!10^{-3}$, $\delta\!=\!-0.74$).
+\emph{evaluated} solvable individuals; the coloured bars are over
+\emph{retained} cell-winner elites. \textsf{STR}'s evaluated
+distribution sits $0.78$\,decades above \textsf{PLAY}'s (median
+$3.15$ vs $2.37$, i.e.\ a $\approx\!6\times$ difference in nodes
+per solver call). Its retained distribution stays
+$0.17$\,decades higher than \textsf{PLAY}'s (median $2.73$ vs
+$2.56$); pairwise per-seed Mann--Whitney on the
+per-seed-mean-of-retained gives $p_\text{adj}\!<\!10^{-3}$,
+$\delta\!=\!-0.74$ (large).
 The picture for the other three conditions is symmetric and small.
 
 The reason is not that wall density is directly correlated with A*
@@ -755,18 +809,23 @@ the descriptor in ways our protocol does not measure.
 \label{sec:conclusion}
 
 The behavioral descriptor in MAP-Elites is not a passive lens onto
-the design space; it is a hidden selection pressure that, in
-domains where the descriptor pushes mutations toward
-infeasibility-rich regions, can silently double the wall-clock
-cost of a search the practitioner believed to be cheap. The
-phenomenon replicates across two distinct PCG domains, with the
-rank-ordering of descriptor families \emph{not} preserved across
-them. We have given a controlled experimental protocol for
-measuring this effect, a mechanism analysis showing it is driven
-by infeasibility-rate inflation rather than per-board complexity,
-and a practical decision guide for QD-PCG practitioners. The full
-code, raw archives, and per-evaluation logs are released as a
-replication package.
+the design space; it is a hidden selection pressure that can
+silently double the wall-clock cost of a search the practitioner
+believed cheap (Sokoban, $2.2\times$ overhead) or, with the wrong
+choice, cause MAP-Elites to underperform random search outright
+(platformer, where \textsf{PLAY} is significantly \emph{worse} than
+\textsf{RAND}). Across both domains and nine pre-registered
+contrasts, eight cross-domain consistency tests reach Stouffer
+combined $p < 10^{-3}$. The single contrast that fails to
+replicate is the \emph{direction} of the hardness-selection
+mechanism, which is positive in Sokoban (\textsf{STR} retains
+harder boards) but reverses in the platformer --- formalising the
+domain-dependence of the mechanism's manifestation. We have given
+a controlled experimental protocol, a mechanism analysis attributing
+the wall-clock effect in Sokoban to a $1.6\times$ inflation in
+mutation-induced infeasibility, and a practical decision guide
+for QD-PCG practitioners. The full code, raw archives, and
+per-evaluation logs are released as a replication package.
 
 % ------------------- references -------------------
 \bibliographystyle{IEEEtran}

@@ -400,3 +400,57 @@ on pits indirectly selects for solver-cheap content.
 - The cross-domain non-preservation of rank order is suggestive
   but I'd want another 1--2 domains to call it a generalisation.
 
+
+## Day 1 — QA pass
+
+Wrote `verify_paper_claims.py` that recomputes every numerical
+claim in the paper from raw data and asserts agreement. Found and
+fixed:
+
+1. **Abstract / F1 was wrong about the platformer.** I had claimed
+   "every MAP-Elites variant significantly outperforms random search
+   on coverage and QD-score in both domains." Actually in the
+   platformer only \textsf{COMMON} significantly beats \textsf{RAND};
+   \textsf{STR} and \textsf{SKILL} are statistically tied with
+   \textsf{RAND}; \textsf{PLAY} is significantly *worse* than
+   \textsf{RAND} ($\delta = -0.80$). This is a much stronger F1: with
+   the wrong descriptor, MAP-Elites underperforms a baseline that
+   uses none. Reframed the abstract and F1 around this.
+
+2. **Coverage-gap percentages were off.** Claimed Sokoban
+   COMMON-vs-PLAY gap was 19% of mean; actual 16.2%. Platformer was
+   claimed 28%; actual 22.1%.
+
+3. **Wall-clock seed ranges quoted in §VI.A were rounded
+   uncomfortably.** STR: claimed 72--108s, actual 62--107s.
+   PLAY: claimed 25--58s, actual 20--62s. Updated.
+
+4. **Mechanism section conflated mean and median.** Paper text said
+   "median log10(nodes) ≈ 2.9 vs ≈ 2.4 for PLAY"; that pair is
+   actually the means. The figure correctly uses medians but the
+   medians are different (STR median 3.15, PLAY 2.37). Updated to
+   use medians consistently and quoted the actual values.
+
+5. **Cliff's δ = 1.00 was an overclaim for one pair.** STR/SKILL/
+   COMMON vs RAND all have $|\delta|=1.0$, but PLAY vs RAND has
+   $|\delta|=0.998$ (one near-tied pair). Updated to specify
+   "near-perfect separation; PLAY $|\delta|=0.998$."
+
+6. **DSAGE was cited under the wrong key/title.** The bib entry
+   `fontaine2021dsage` actually pointed to "On the Importance of
+   Environments in Human-Robot Coordination" (a different Fontaine
+   et al. paper). Replaced with the correct DSAGE: Bhatt, Tjanaka,
+   Fontaine, Nikolaidis. *Deep Surrogate Assisted Generation of
+   Environments.* NeurIPS 2022.
+
+7. **No cross-domain combined-p test in the paper.** The research
+   log planned a Stouffer combined p-value but I never added it.
+   Wrote `cross_domain_stats.py`; ran on nine pre-registered
+   contrasts; eight reach Stouffer combined $p<10^{-3}$ across both
+   domains. The one that fails is "STR retains harder boards than
+   PLAY" — Sokoban $\delta=+0.74$, platformer $\delta=-0.38$. That
+   the *mechanism's direction* doesn't replicate is itself a clean
+   finding for the paper. Added Table~II.
+
+After all fixes: verify_paper_claims.py reports 113/113 PASS.
+

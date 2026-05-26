@@ -1,0 +1,162 @@
+[
+  {
+    "hypothesis": "COMMON > RAND on coverage",
+    "metric": "common_coverage",
+    "a": "COMMON",
+    "b": "RAND",
+    "sokoban": {
+      "p": 2.1794742624804842e-08,
+      "delta": 1.0
+    },
+    "platformer": {
+      "p": 4.244917434319451e-06,
+      "delta": 0.82
+    },
+    "combined_p": 1.1075436222331798e-12,
+    "consistent": true
+  },
+  {
+    "hypothesis": "COMMON > RAND on QD",
+    "metric": "common_qd_score",
+    "a": "COMMON",
+    "b": "RAND",
+    "sokoban": {
+      "p": 3.3978075640866785e-08,
+      "delta": 1.0
+    },
+    "platformer": {
+      "p": 1.3448843447295194e-06,
+      "delta": 0.87
+    },
+    "combined_p": 4.857566245413143e-13,
+    "consistent": true
+  },
+  {
+    "hypothesis": "COMMON > PLAY on coverage",
+    "metric": "common_coverage",
+    "a": "COMMON",
+    "b": "PLAY",
+    "sokoban": {
+      "p": 1.0632608944144775e-07,
+      "delta": 0.9525
+    },
+    "platformer": {
+      "p": 1.1917576149657706e-07,
+      "delta": 0.955
+    },
+    "combined_p": 1.2235579453220455e-13,
+    "consistent": true
+  },
+  {
+    "hypothesis": "COMMON > PLAY on QD",
+    "metric": "common_qd_score",
+    "a": "COMMON",
+    "b": "PLAY",
+    "sokoban": {
+      "p": 8.285396466929395e-08,
+      "delta": 0.97
+    },
+    "platformer": {
+      "p": 8.285396466929395e-08,
+      "delta": 0.97
+    },
+    "combined_p": 6.694017090378251e-14,
+    "consistent": true
+  },
+  {
+    "hypothesis": "COMMON > STR  on coverage",
+    "metric": "common_coverage",
+    "a": "COMMON",
+    "b": "STR",
+    "sokoban": {
+      "p": 3.010598017681054e-07,
+      "delta": 0.915
+    },
+    "platformer": {
+      "p": 0.0003313766332684601,
+      "delta": 0.63
+    },
+    "combined_p": 1.4583775488838551e-09,
+    "consistent": true
+  },
+  {
+    "hypothesis": "COMMON > SKILL on coverage",
+    "metric": "common_coverage",
+    "a": "COMMON",
+    "b": "SKILL",
+    "sokoban": {
+      "p": 4.112666035172161e-05,
+      "delta": 0.7225
+    },
+    "platformer": {
+      "p": 1.3943912513768595e-05,
+      "delta": 0.775
+    },
+    "combined_p": 4.536065339801563e-09,
+    "consistent": true
+  },
+  {
+    "hypothesis": "PLAY < SKILL on coverage",
+    "metric": "common_coverage",
+    "a": "SKILL",
+    "b": "PLAY",
+    "sokoban": {
+      "p": 0.00393192325916957,
+      "delta": 0.4875
+    },
+    "platformer": {
+      "p": 0.003035468201099574,
+      "delta": 0.5075
+    },
+    "combined_p": 6.682350204598858e-05,
+    "consistent": true
+  },
+  {
+    "hypothesis": "PLAY < STR   on coverage",
+    "metric": "common_coverage",
+    "a": "STR",
+    "b": "PLAY",
+    "sokoban": {
+      "p": 0.10685574828616828,
+      "delta": 0.2275
+    },
+    "platformer": {
+      "p": 0.0009941050936560674,
+      "delta": 0.5725
+    },
+    "combined_p": 0.0010861709910437633,
+    "consistent": true
+  },
+  {
+    "hypothesis": "PLAY < COMMON on QD",
+    "metric": "common_qd_score",
+    "a": "COMMON",
+    "b": "PLAY",
+    "sokoban": {
+      "p": 8.285396466929395e-08,
+      "delta": 0.97
+    },
+    "platformer": {
+      "p": 8.285396466929395e-08,
+      "delta": 0.97
+    },
+    "combined_p": 6.694017090378251e-14,
+    "consistent": true
+  },
+  {
+    "hypothesis": "STR retains harder boards than PLAY",
+    "metric": "mech_logn",
+    "a": "STR",
+    "b": "PLAY",
+    "sokoban": {
+      "p": 2.9479586089607503e-05,
+      "delta": 0.745
+    },
+    "platformer": {
+      "p": 0.9794382029697626,
+      "delta": -0.38
+    },
+    "combined_p": null,
+    "consistent": false
+  }
+]
